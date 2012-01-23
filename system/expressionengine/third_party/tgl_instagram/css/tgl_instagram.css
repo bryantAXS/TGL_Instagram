@@ -1,0 +1,15 @@
+#steps-container{
+	
+}
+#steps-container ul{
+	margin-bottom:20px;
+}
+#steps-container li{
+	list-style-type:disc;
+	list-style-position:inside;
+	margin: 5px 0;
+}
+.link-button{
+	display: block;
+	margin-top: 10px;	
+}
