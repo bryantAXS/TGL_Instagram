@@ -1,7 +1,7 @@
 <?php
 class Tgl_instagram_upd
 {
-	public $version = '0.1';
+	public $version = '1.0';
 	
 	public function __construct()
 	{
@@ -18,13 +18,6 @@ class Tgl_instagram_upd
 			'has_publish_fields' => 'n'
 		));
 
-		$data = array(
-		  'class'     => 'Tgl_instagram',
-		  'method'    => 'callback'
-		);
-
-		$this->EE->db->insert('actions', $data);
-		
 		$this->EE->load->dbforge();
 		
 		//create tgl_instagram module settings table
@@ -61,9 +54,6 @@ class Tgl_instagram_upd
 	public function uninstall()
 	{
 		
-		//$this->EE->db->where('Tgl_instagram', 'callback');
-    //$this->EE->db->delete('actions');
-
     $this->EE->db->query("DELETE FROM exp_modules WHERE module_name = 'Tgl_Instagram'");
     
 		$this->EE->load->dbforge();
