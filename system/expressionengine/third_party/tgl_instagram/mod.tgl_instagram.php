@@ -23,6 +23,7 @@ class Tgl_instagram
 	{
 		
 		$this->EE =& get_instance();
+		$this->EE->load->helper('url');
 		$this->EE->load->model('tgl_instagram_model');
 		$settings = $this->EE->tgl_instagram_model->get_settings();
 
@@ -302,7 +303,7 @@ class Tgl_instagram
 			return FALSE;
 		}
 
-		$filename = "tgl-instagram";
+		$filename = "tgl-instagram" . '-' . current_url();
 
 		foreach($cache_params as $key => $value){
 			
