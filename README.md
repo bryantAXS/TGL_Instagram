@@ -118,6 +118,8 @@ Number of comments for the specific image
 
 Within each image's loop, there are a few more items you can loop over to get more information about each image
 
+
+
 ### Comments
 
 	{comments}{/comments}
@@ -142,6 +144,8 @@ The profile picture from the user who submitted the comment
 
 The full name of the user who submitted the comment
 
+
+
 ### Likes
 
 	{likes}{/likes}
@@ -161,6 +165,8 @@ Full name of the user who liked the photo
 	{like_profile_picture}
 
 Profile picture of the user who liked the photo
+
+
 
 ### Tags
 
