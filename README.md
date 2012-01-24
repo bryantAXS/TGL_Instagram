@@ -120,7 +120,7 @@ Within each image's loop, there are a few more items you can loop over to get mo
 
 
 
-### Comments
+### _Comments_
 
 	{comments}{/comments}
 
@@ -146,7 +146,7 @@ The full name of the user who submitted the comment
 
 
 
-### Likes
+### _Likes_
 
 	{likes}{/likes}
 
@@ -168,7 +168,7 @@ Profile picture of the user who liked the photo
 
 
 
-### Tags
+### _Tags_
 
 	{tags}{/tags}
 
