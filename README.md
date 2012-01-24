@@ -4,11 +4,13 @@ Version 1.0
 
 This is an ExpressionEngine 2 module for interacting with the Instagram API.  Currently, the module only retrieves information from the authenticated user's feed and a specified user's feed.  The module has a CP backend, which directs the user through the oAuth process.
 
-## Tag Pairs
+# Tag Pairs
 
-The following tags can be used for looping through images:
+_The following tags can be used for looping through images:_
 
-	{exp:tgl_instagram:feed}{/exp:tgl_instagram}
+## Feed
+
+	{exp:tgl_instagram:feed}{/exp:tgl_instagram:feed}
 
 This tag loops through the authenticated user's feed.  The feed displays pictures from other instagram user's the authenticated user follows as well as their own images.
 	
@@ -18,7 +20,9 @@ __Parameters__
 
 the number of images you want to see
 
-	{exp:tgl_instagram:user_feed}{/exp:tgl_instagram}
+## User Feed
+
+	{exp:tgl_instagram:user_feed}{/exp:tgl_instagram:user_feed}
 
 This tag loops though a specified user's feed, and only displays image they have shared.
 
@@ -31,6 +35,7 @@ the number of images you want to display
 	username
 
 the username of the specific user, who you want to display images from.
+
 
 ## Image Data
 
