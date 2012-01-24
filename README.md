@@ -4,6 +4,15 @@ Version 1.0
 
 This is an ExpressionEngine 2 module for interacting with the Instagram API.  Currently, the module only retrieves information from the authenticated user's feed and a specified user's feed.  The module has a CP backend, which directs the user through the oAuth process.
 
+Follow me on Twitter here: http://twitter.com/bryant_
+
+# Installation 
+
+* Move tgl_instagram folder into your EE third-party directory
+* Install Module
+* Follow steps to authenticating
+* When registering a new client with Instagram, make sure the OAuth redirect_uri value is set correct.  For more information see here: http://instagram.com/developer/auth/
+
 # Tag Pairs
 
 _The following tags can be used for looping through images:_

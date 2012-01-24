@@ -38,7 +38,6 @@
 	}else if(isset($settings['client_id'], $settings['client_secret'], $authorized_url) && ! isset($settings['access_token'])){
 		
 		//step 2
-
 		echo "<div id='steps-container'>";
 		echo "<h3>Step 2</h3>";
 		echo "<ul>";
@@ -53,14 +52,13 @@
 	}else{
 		
 		//step 1
-
 		echo "<div id='steps-container'>";
 		echo "<h3>Step 1</h3>";
 		echo "<ul>";
 		echo "<li>Visit <a target='_blank' href='http://instagram.com/developer/manage/'>http://instagram.com/developer/manage/</a> to register your website/application with Instagram's API</li>";
 		echo '<li>Login or Register a new account.</li>';
 		echo '<li>Click "Register a New Client"</li>';
-		echo "<li>Fillout Registration Form.  When entering a URL for the field <small>OAuth redirect_uri</small>, the value should be a url to your site's control panel. ie: http://mysite.com/system/index.php  </li>";
+		echo "<li>Fillout Registration Form.  When entering a URL for the field <small>OAuth redirect_uri</small>, the value should be a url to your site. ie: http://mysite.com  </li>";
 		echo "<li>After registering, copy the Client ID and Client Secret values into the two fields below. </li>";
 		echo "</ul>";
 		echo "</div>";
