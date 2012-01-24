@@ -141,7 +141,7 @@ Loop over the comments for each picture
 
 Text from a specific comment
 
-	{comment_usernam}
+	{comment_username}
 
 Username from the user who submitted the comment
 
