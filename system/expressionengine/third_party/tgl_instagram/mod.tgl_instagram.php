@@ -56,11 +56,15 @@ class Tgl_instagram
 		
 		//params from the template tag
 		$params = array();
+		$params['cache'] = (integer) $this->EE->TMPL->fetch_param('cache', $this->refresh_cache);
 		$params['limit'] = $this->EE->TMPL->fetch_param('limit', null);
 
 		//check to see if we have cached data to use
 		if($cached_data = $this->_check_cache($params)){
-			return $cached_data;
+			if(! $this->cache_expired){
+				echo 'cached';
+				return $cached_data;	
+			}
 		}
 
 		//no cache data to use, lets hit the api
@@ -114,6 +118,7 @@ class Tgl_instagram
 		$params = array();
 		$params['user_name'] = $this->EE->TMPL->fetch_param('username');
 		$params['limit'] = $this->EE->TMPL->fetch_param('limit');
+		$params['cache'] = (integer) $this->EE->TMPL->fetch_param('cache', $this->refresh_cache);
 
 		//make sure we have the required parameters
 		if(! isset($params['user_name']))
@@ -121,8 +126,11 @@ class Tgl_instagram
 			return FALSE;
 		}
 
+		//check to see if we have cached data to use
 		if($cached_data = $this->_check_cache($params)){
-			return $cached_data;
+			if(! $this->cache_expired){
+				return $cached_data;	
+			}
 		}
 
 		//get the user id for the api call
@@ -175,21 +183,34 @@ class Tgl_instagram
 		if(! $row_variables) $row_variables = array();
 
 	  //static data
-	  //$row_variables['tags'] = $data['tags'];
 	  $row_variables['filter'] = $data['filter'];
 	  $row_variables['created_at'] = $data['created_time'];
 	  $row_variables['link'] = $data['link'];
 
+	  $row_variables['tag_count'] = count($data['tags']);
+	  if(count($data['tags']) > 0){
+	  	$row_variables['tags'] = $this->_parse_tags($data['tags']);
+	  }else{
+	  	$row_variables['tags'] = array();
+	  }
+
 	  //caption
 	  if(count($data['caption']) > 0){
 	  	$row_variables['caption'] = $data['caption']['text'];
+	  }else{
+	  	$row_variables['caption'] = "";
 	  }
 
 	  //comments
 	  if(count($data['comments']) > 0){
-	  	
 	  	$row_variables['comment_count'] = $data['comments']['count'];
 	  	$row_variables['comments'] = $this->_parse_comments($data['comments']['data']);
+	  }
+
+	  //likes
+	  if(count($data['likes']) > 0){
+	  	$row_variables['likes_count'] = $data['likes']['count'];
+	  	$row_variables['likes'] = $this->_parse_likes($data['likes']['data']);
 	  }
 
 	  //user
@@ -199,22 +220,16 @@ class Tgl_instagram
 	  $row_variables['profile_picture'] = $data['user']['profile_picture'];
 	  $row_variables['full_name'] = $data['user']['full_name'];
 
+
 	  //images
 	  $row_variables['thumbnail_url'] = $data['images']['thumbnail']['url'];
 	  $row_variables['thumbnail'] = "<img src='".$data['images']['thumbnail']['url']."' width='".$data['images']['thumbnail']['width']."' height='".$data['images']['thumbnail']['height']."'/>";
 
-	  //likes
-	  if(count($data['likes']) > 0){
-	  	
-	  	$row_variables['likes_count'] = $data['likes']['count'];
-	  	$row_variables['likes'] = $this->_parse_likes($data['likes']['data']);
-	  }
+	  $row_variables['low_resolution_url'] = $data['images']['low_resolution']['url'];
+	  $row_variables['low_resolution'] = "<img src='".$data['images']['low_resolution']['url']."' width='".$data['images']['low_resolution']['width']."' height='".$data['images']['low_resolution']['height']."'/>";
 
-	  $row_variables['low_url'] = $data['images']['low_resolution']['url'];
-	  $row_variables['low'] = "<img src='".$data['images']['low_resolution']['url']."' width='".$data['images']['low_resolution']['width']."' height='".$data['images']['low_resolution']['height']."'/>";
-
-	  $row_variables['standard_url'] = $data['images']['standard_resolution']['url'];
-	  $row_variables['standard'] = "<img src='".$data['images']['standard_resolution']['url']."' width='".$data['images']['standard_resolution']['width']."' height='".$data['images']['standard_resolution']['height']."'/>";
+	  $row_variables['standard_resolution_url'] = $data['images']['standard_resolution']['url'];
+	  $row_variables['standard_resolution'] = "<img src='".$data['images']['standard_resolution']['url']."' width='".$data['images']['standard_resolution']['width']."' height='".$data['images']['standard_resolution']['height']."'/>";
 
 	  return $row_variables;
 
@@ -265,6 +280,25 @@ class Tgl_instagram
 		}
 
 		return $likes;
+
+	}
+
+	/**
+	 * set tags data from the api
+	 * @param  array $data tags data from the api
+	 * @return array
+	 */
+	function _parse_tags($data)
+	{
+
+		$tags = array();
+		
+		foreach ($data as $tag_name)
+		{
+			$tags[] = array('tag' => $tag_name); 
+		}
+
+		return $tags;
 
 	}
 
@@ -354,7 +388,7 @@ class Tgl_instagram
 		$timestamp = substr($cache, 0, $eol);
 		$cache = trim((substr($cache, $eol)));
 		
-		if ( time() > ($timestamp + ($this->refresh_cache * 60)) )
+		if((time() > ($timestamp + ($cache_params['cache'] * 60))) || $cache_params['cache'] == 0)
 		{
 			$this->cache_expired = TRUE;
 		}
