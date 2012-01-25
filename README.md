@@ -4,11 +4,11 @@ Version 1.0
 
 This is an ExpressionEngine 2 module for interacting with the Instagram API.  Currently, the module only retrieves information from the authenticated user's feed and a specified user's feed.  The module has a CP backend, which directs the user through the oAuth process.
 
+Follow me on Twitter here: http://twitter.com/bryant_
+
 # Acknowledgements
 
 This module uses the Instagram PHP API class writen by <a href="https://github.com/macuenca">macuenca</a>: https://github.com/macuenca/Instagram-PHP-API
-
-Follow me on Twitter here: http://twitter.com/bryant_
 
 # Installation 
 
