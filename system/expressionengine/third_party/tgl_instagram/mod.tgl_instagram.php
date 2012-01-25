@@ -74,7 +74,7 @@ class Tgl_instagram
 		$response = json_decode($feed_data, true);
 
 		//if there is no data, return
-		if( ! isset($response['data']) && count($response['data']) < 1)
+		if( ! isset($response['data']) || count($response['data']) < 1 || empty($response['data']))
 		{
 			return FALSE;
 		}
@@ -136,13 +136,14 @@ class Tgl_instagram
 		//get the user id for the api call
 		$user_id = $this->_get_user_id($params['user_name']);
 		$user_feed_data = $this->instagram->getUserRecent($user_id);
-		$response = json_decode($user_feed_data, true);
 		
+		$response = json_decode($user_feed_data, true);
+
 		//if there is no data, return
-		if( ! isset($response['data']) && count($response['data']) < 1)
+		if( ! isset($response['data']) || count($response['data']) < 1 || empty($response['data']))
 		{
 			return FALSE;
-		}	
+		}
 
 		$tagdata = $this->EE->TMPL->tagdata;
 
