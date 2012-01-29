@@ -2,7 +2,7 @@
 
 Version 1.0
 
-This is an ExpressionEngine 2 module for interacting with the Instagram API.  Currently, the module only retrieves information from the authenticated user's feed and a specified user's feed.  The module has a CP backend, which directs the user through the oAuth process.
+This is an ExpressionEngine 2 module for interacting with the Instagram API.  The module has a CP backend, which directs the user through the oAuth process.
 
 Follow me on Twitter here: http://twitter.com/bryant_
 
@@ -33,6 +33,10 @@ __Parameters__
 
 the number of images you want to see
 
+	cache
+
+the number of minutes you want the information to be cached for. 0 = no caching
+
 ## User Feed
 
 	{exp:tgl_instagram:user_feed}{/exp:tgl_instagram:user_feed}
@@ -45,9 +49,29 @@ __Parameters__
 
 the number of images you want to display
 
+	cache
+
+the number of minutes you want the information to be cached for. 0 = no caching
+
 	username
 
 the username of the specific user, who you want to display images from.
+
+## Popular Images
+
+	{exp:tgl_instagram:popular}{/exp:tgl_instagram:popular}
+
+This tag loops though all popular images
+
+__Parameters__
+
+	limit
+
+the number of images you want to display
+
+	cache
+
+the number of minutes you want the information to be cached for. 0 = no caching
 
 
 ## Image Data

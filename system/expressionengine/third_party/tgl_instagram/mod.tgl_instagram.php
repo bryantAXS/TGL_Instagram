@@ -56,6 +56,7 @@ class Tgl_instagram
 		
 		//params from the template tag
 		$params = array();
+		$params['method'] = 'feed'; // just adding a dummy value, so we don't get duplicate cache values for other methods that use the same params
 		$params['cache'] = (integer) $this->EE->TMPL->fetch_param('cache', $this->refresh_cache);
 		$params['limit'] = $this->EE->TMPL->fetch_param('limit', null);
 
@@ -116,6 +117,7 @@ class Tgl_instagram
 	function user_feed(){
 		
 		$params = array();
+		$params['method'] = 'username'; // just adding a dummy value, so we don't get duplicate cache values for other methods that use the same params
 		$params['user_name'] = $this->EE->TMPL->fetch_param('username');
 		$params['limit'] = $this->EE->TMPL->fetch_param('limit');
 		$params['cache'] = (integer) $this->EE->TMPL->fetch_param('cache', $this->refresh_cache);
@@ -152,6 +154,57 @@ class Tgl_instagram
 
 		foreach ($response['data'] as $data) {
 		  
+		  if($params['limit'] != null && $count == $params['limit']) break;
+
+		  $row_variables = array();
+		  
+		  $row_variables = $this->_parse_row_data($data, $row_variables);
+		  
+		  $variables[] = $row_variables;
+    	
+    	$count++;
+
+  	}
+
+    $return_data = $this->EE->TMPL->parse_variables($tagdata, $variables);
+
+    $this->_write_cache($return_data, $params);
+
+    return $return_data;
+
+	}
+
+	function popular(){
+		
+		$params = array();
+		$params['method'] = 'popular'; // just adding a dummy value, so we don't get duplicate cache values for other methods that use the same params
+		$params['limit'] = $this->EE->TMPL->fetch_param('limit');
+		$params['cache'] = (integer) $this->EE->TMPL->fetch_param('cache', $this->refresh_cache);
+
+		//check to see if we have cached data to use
+		if($cached_data = $this->_check_cache($params)){
+			if(! $this->cache_expired){
+				return $cached_data;	
+			}
+		}
+
+		$popular_feed_data = $this->instagram->getPopularMedia();
+	
+		$response = json_decode($popular_feed_data, true);
+
+		//if there is no data, return
+		if( ! isset($response['data']) || count($response['data']) < 1 || empty($response['data']))
+		{
+			return FALSE;
+		}
+
+		$tagdata = $this->EE->TMPL->tagdata;
+
+		$variables = array();
+		$count = 0;
+
+		foreach ($response['data'] as $data) {
+		 	
 		  if($params['limit'] != null && $count == $params['limit']) break;
 
 		  $row_variables = array();
