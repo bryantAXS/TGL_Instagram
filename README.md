@@ -3,11 +3,12 @@
 Version 1.1
 
 Changelog:
-v1.1
+
+_v1.1_
 * Bug fix causeing plugin page in EECP to show up white
 * Added ability to list popular images
 
-v 1.0:
+_v 1.0_
 * Initial Release
 * Ability to list media from authenticated users feed
 * Ability to list media from specified user
