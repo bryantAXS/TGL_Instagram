@@ -2,17 +2,6 @@
 
 Version 1.1
 
-Changelog:
-
-_v1.1_
-* Bug fix causeing plugin page in EECP to show up white
-* Added ability to list popular images
-
-_v 1.0_
-* Initial Release
-* Ability to list media from authenticated users feed
-* Ability to list media from specified user
-
 This is an ExpressionEngine 2 module for interacting with the Instagram API.  The module has a CP backend, which directs the user through the oAuth process.
 
 Follow me on Twitter here: http://twitter.com/bryant_
@@ -227,6 +216,21 @@ Loop over each images tags
 	{tag}
 
 The tag name
+
+
+
+## Changelog
+
+_v 1.1_
+
+* Bug fix causeing plugin page in EECP to show up white
+* Added ability to list popular images
+
+_v 1.0_
+
+* Initial Release
+* Ability to list media from authenticated users feed
+* Ability to list media from specified user
 
 
 
