@@ -56,6 +56,8 @@ class Tgl_instagram_mcp
 				if(! empty($access_token)){
 					$this->EE->tgl_instagram_model->insert_access_token($access_token);
 					$this->data['settings']['access_token'] = $access_token;
+				}else{
+					//echo 'error';
 				}
 
 			}else{
@@ -121,90 +123,6 @@ class Tgl_instagram_mcp
 		
 		$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=tgl_instagram');
 
-	}
-	
-	/**
-	 * Called after a user clicks "Register"
-	 *
-	 * @return void
-	 * 
-	 */
-	public function register_with_twitter()
-	{
-		
-		$this->EE->load->model('tgl_instagram_model');
-		$settings = $this->EE->tgl_instagram_model->get_settings();
-		
-		$oauth = new TwitterOAuth($settings['consumer_key'], $settings['consumer_secret']);
-		$request = $oauth->getRequestToken();
-		
-		if($request != FALSE){
-			
-			$requestToken = $request['oauth_token'];
-			$requestTokenSecret = $request['oauth_token_secret'];
-			
-			//save auth tokens into the db
-			$success = $this->EE->tgl_instagram_model->insert_secret_token($requestToken,$requestTokenSecret);
-
-			if($success){
-				
-				// get Twitter generated registration URL and load the authenticate view
-				$this->data['register_url'] = $oauth->getAuthorizeURL($request);
-				$this->EE->session->set_flashdata('message_success', $this->EE->lang->line('Success!'));
-				return $this->EE->load->view('authenticate', $this->data, TRUE);
-			}
-			else
-			{
-				$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('There was an error saving request tokens.'));
-				$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=tgl_instagram');
-			}
-			
-		}else{
-			
-			//else : we were not able to create request tokens, probably becase the consumer key/secret were correct.  lets erase those keys
-			//			 from the settings and send the user back to square one of the process.
-			
-			$this->EE->tgl_instagram_model->delete_all_settings();
-			$this->EE->session->set_flashdata('message_failure', $this->EE->lang->line('There was an error generating request tokens. Please verify and re-submit your Consumer Key and Secret.'));
-			$this->EE->functions->redirect(BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=tgl_instagram');
-			
-		}
-					
-	}
-	
-	/**
-	 * Used to generate the access tokens from Twitter.  This is the last step in the authentication process
-	 *
-	 * @param string $settings 
-	 * @return boolean : depending if we were able to generate the tokens and save them to the DB or NOT
-	 * @author Bryant Hughes
-	 */
-	private function generate_access_tokens($settings)
-	{
-		$this->EE->load->model('tgl_instagram_model');
-		
-		//Retrieve our previously generated request token & secret
-		$requestToken = $settings['request_token'];
-		$requestTokenSecret = $settings['request_token_secret'];
-		
-		$oauth = new TwitterOAuth('consumer_key', 'consumer_secret', $requestToken, $requestTokenSecret);
-		
-		// Generate access token by providing PIN for Twitter
-		$request = $oauth->getAccessToken(NULL, $settings['pin']);
-		
-		if($request != FALSE)
-		{
-			$access_token = $request['oauth_token'];
-			$access_token_secret = $request['oauth_token_secret'];
-
-			// Save our access token/secret
-			return $this->EE->tgl_instagram_model->insert_access_token($access_token, $access_token_secret);
-		}
-		else
-		{
-			return FALSE;
-		}
-		
 	}
 	
 	/**

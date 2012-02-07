@@ -25,6 +25,7 @@ class Tgl_instagram
 		$this->EE =& get_instance();
 		$this->EE->load->helper('url');
 		$this->EE->load->model('tgl_instagram_model');
+
 		$settings = $this->EE->tgl_instagram_model->get_settings();
 
 		$config = array(
@@ -48,6 +49,10 @@ class Tgl_instagram
 		echo "</pre>";
 	}
 
+	function _log($message){
+		$this->EE->TMPL->log_item("TGL Instagram - ".$message);
+	}
+
 	/**
 	 * Returns the authenticated user's feed.
 	 * @return [type]
@@ -63,7 +68,6 @@ class Tgl_instagram
 		//check to see if we have cached data to use
 		if($cached_data = $this->_check_cache($params)){
 			if(! $this->cache_expired){
-				echo 'cached';
 				return $cached_data;	
 			}
 		}
@@ -125,12 +129,14 @@ class Tgl_instagram
 		//make sure we have the required parameters
 		if(! isset($params['user_name']))
 		{
+			$this->_log("Username not specified");
 			return FALSE;
 		}
 
 		//check to see if we have cached data to use
 		if($cached_data = $this->_check_cache($params)){
 			if(! $this->cache_expired){
+				$this->_log("Returning cached data");
 				return $cached_data;	
 			}
 		}
@@ -144,6 +150,7 @@ class Tgl_instagram
 		//if there is no data, return
 		if( ! isset($response['data']) || count($response['data']) < 1 || empty($response['data']))
 		{
+			$this->_log("No response from Instagram API");
 			return FALSE;
 		}
 
@@ -169,6 +176,8 @@ class Tgl_instagram
     $return_data = $this->EE->TMPL->parse_variables($tagdata, $variables);
 
     $this->_write_cache($return_data, $params);
+
+    $this->_log("Returning fresh data");
 
     return $return_data;
 
@@ -368,6 +377,10 @@ class Tgl_instagram
 		$response = json_decode($user_data, true);
 
 		$user_id = false;
+
+		if(empty($response['data'])){
+			return FALSE;
+		}
 
 		foreach($response['data'] as $data){
 			if($data['username'] == $username){

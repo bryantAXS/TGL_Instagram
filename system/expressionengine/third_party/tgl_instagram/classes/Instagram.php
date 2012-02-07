@@ -128,6 +128,12 @@ class Instagram {
         return $this->_httpClient->getResponse();
     }
 
+    function _dump($data){
+        echo "<pre>";
+        echo print_r($data);
+        echo "</pre>";
+    }
+
     /**
      * Retrieves the authorization code to be used in every request
      * @return string. The JSON encoded OAuth token

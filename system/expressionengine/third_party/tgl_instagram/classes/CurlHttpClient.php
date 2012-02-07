@@ -37,6 +37,15 @@ class CurlHttpClient {
         curl_setopt($this->handler, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->handler, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($this->handler, CURLOPT_USERAGENT, self::DEFAULT_USER_AGENT);
+        
+        curl_setopt ($this->handler, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt ($this->handler, CURLOPT_SSL_VERIFYPEER, 0); 
+    }
+
+    function _dump($data){
+        echo "<pre>";
+        echo print_r($data);
+        echo "</pre>";
     }
 
     /**
@@ -83,6 +92,7 @@ class CurlHttpClient {
      */
     public function setPostParam($name, $value) {
         $this->postParams[$name] = $value;
+        //$this->_dump($this->postParams);
         curl_setopt($this->handler, CURLOPT_POSTFIELDS, $this->postParams);
     }
 
@@ -91,8 +101,14 @@ class CurlHttpClient {
      * @return string
      */
     public function getResponse() {
+        
         $response = curl_exec($this->handler);
-        curl_close($this->handler);
+        
+        if (curl_errno($this->handler)) {
+            //print curl_error($this->handler);
+        } else {
+            //curl_close($this->handler);
+        }
 
         return $response;
     }
