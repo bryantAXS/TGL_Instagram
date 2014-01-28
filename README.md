@@ -57,6 +57,26 @@ the number of minutes you want the information to be cached for. 0 = no caching
 
 the username of the specific user, who you want to display images from.
 
+## Tag Feed
+
+	{exp:tgl_instagram:tag_feed}{/exp:tgl_instagram:tag_feed}
+
+This tag loops though a specified tag's feed.
+
+__Parameters__
+
+	limit
+
+the number of images you want to display
+
+	cache
+
+the number of minutes you want the information to be cached for. 0 = no caching
+
+	tagname
+
+the specific tag (hashtag) that you want to display images from.
+
 ## Popular Images
 
 	{exp:tgl_instagram:popular}{/exp:tgl_instagram:popular}

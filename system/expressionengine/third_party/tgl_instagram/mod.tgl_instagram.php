@@ -235,6 +235,74 @@ class Tgl_instagram
 	}
 
 	/**
+	 * Returns a specific tags's feed.
+	 * @return [type]
+	 */
+	function tag_feed(){
+		
+		$params = array();
+		$params['method'] = 'tag'; // just adding a dummy value, so we don't get duplicate cache values for other methods that use the same params
+		$params['tag_name'] = $this->EE->TMPL->fetch_param('tagname');
+		$params['limit'] = $this->EE->TMPL->fetch_param('limit');
+		$params['cache'] = (integer) $this->EE->TMPL->fetch_param('cache', $this->refresh_cache);
+
+		//make sure we have the required parameters
+		if(! isset($params['tag_name']))
+		{
+			$this->_log("Tag not specified");
+			return FALSE;
+		}
+
+		//check to see if we have cached data to use
+		if($cached_data = $this->_check_cache($params)){
+			if(! $this->cache_expired){
+				$this->_log("Returning cached data");
+				return $cached_data;	
+			}
+		}
+
+		//get the user id for the api call
+		$tag_feed_data = $this->instagram->getRecentTags($params['tag_name']);
+		
+		$response = json_decode($tag_feed_data, true);
+
+		//if there is no data, return
+		if( ! isset($response['data']) || count($response['data']) < 1 || empty($response['data']))
+		{
+			$this->_log("No response from Instagram API");
+			return FALSE;
+		}
+
+		$tagdata = $this->EE->TMPL->tagdata;
+
+		$variables = array();
+		$count = 0;
+
+		foreach ($response['data'] as $data) {
+		  
+		  if($params['limit'] != null && $count == $params['limit']) break;
+
+		  $row_variables = array();
+		  
+		  $row_variables = $this->_parse_row_data($data, $row_variables);
+		  
+		  $variables[] = $row_variables;
+    	
+    	$count++;
+
+  	}
+
+    $return_data = $this->EE->TMPL->parse_variables($tagdata, $variables);
+
+    $this->_write_cache($return_data, $params);
+
+    $this->_log("Returning fresh data");
+
+    return $return_data;
+
+	}
+
+	/**
 	 * Extracts data from a single row returned from the API and assigns it to our row_variables array which eventually gets used to parse our template
 	 * @param  array $data          a single row's data from the Instagram API
 	 * @param  array $row_variables An array of data for a row will be parsing, something this is blank and sometimes it might hold other data that has already been parsed.
